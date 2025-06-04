@@ -24,13 +24,11 @@ public class OrderController {
     @PostMapping("/sync")
     public void sync(@RequestBody List<Order> orders) {
         for (Order o : orders) {
-            if (o.getId() == null) {
-                // Новый заказ — создаём
-                repo.save(o);
-            } else {
-                // Существующий заказ — обновляем
-                repo.save(o);
+            if (o.getUser() == null || o.getOrderDate() == null || o.getStatus() == null || o.getAddress() == null) {
+                throw new IllegalArgumentException("Missing required fields in order");
             }
+            o.setId(null);
+            repo.save(o);
         }
     }
 }
