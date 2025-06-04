@@ -1,11 +1,14 @@
 package com.example.online_clothing_store.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "products")
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +29,10 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonManagedReference
     private Category category;
+
+    public Integer getCategoryId() {
+        return category != null ? category.getId() : null;
+    }
 }
